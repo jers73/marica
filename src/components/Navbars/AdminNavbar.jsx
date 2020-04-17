@@ -14,10 +14,9 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { Link } from "react-router-dom";
 // used for making the prop types of this component
-import PropTypes from "prop-types";
 
 // reactstrap components
 import {
@@ -38,76 +37,64 @@ import {
   Input
 } from "reactstrap";
 
-class AdminNavbar extends React.Component {
-  state = {
-    isOpen: false,
-    dropdownOpen: false,
-    color: "transparent"
-  };
-  sidebarToggle = React.createRef();
-  toggle = () => {
-    if (this.state.isOpen) {
-      this.setState({
-        color: "transparent"
-      });
+const AdminNavbar = (...props) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [color, setColor] = useState("transparent");
+  const sidebarToggle = useRef();
+  const toggle = () => {
+    if (isOpen) {
+      setColor("transparent");
     } else {
-      this.setState({
-        color: "white"
-      });
+      setColor("white");
     }
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
+    setIsOpen(!isOpen);
   };
-  dropdownToggle = e => {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen
-    });
+  const dropdownToggle = () => {
+    setDropdownOpen(dropdownOpen);
   };
-  openSidebar = () => {
+  const openSidebar = () => {
     document.documentElement.classList.toggle("nav-open");
-    this.sidebarToggle.current.classList.toggle("toggled");
+    sidebarToggle.current.classList.toggle("toggled");
   };
   // function that adds color white/transparent to the navbar on resize (this is for the collapse)
-  updateColor = () => {
-    if (window.innerWidth < 993 && this.state.isOpen) {
-      this.setState({
-        color: "white"
-      });
+  const updateColor = () => {
+    if (window.innerWidth < 993 && isOpen) {
+      setColor("white");
     } else {
-      this.setState({
-        color: "transparent"
-      });
+      setColor("transparent")
     }
   };
-  componentDidMount() {
-    window.addEventListener("resize", this.updateColor.bind(this));
-  }
-  componentDidUpdate(e) {
+
+  useEffect(() => {
+    window.addEventListener("resize", updateColor);
+  }, [updateColor]);
+
+  useEffect(() => {
     if (
       window.innerWidth < 993 &&
-      e.history.location.pathname !== e.location.pathname &&
       document.documentElement.className.indexOf("nav-open") !== -1
     ) {
       document.documentElement.classList.toggle("nav-open");
-      this.sidebarToggle.current.classList.toggle("toggled");
+      sidebarToggle.current.classList.toggle("toggled");
     }
-  }
-  render() {
+  });
+
+
     return (
       // add or remove classes depending if we are on full-screen-maps page or not
       <Navbar
         color={
           window.location.href.indexOf("full-screen-maps") !== -1
             ? "white"
-            : this.state.color
+            : color
         }
         expand="lg"
         className={
           window.location.href.indexOf("full-screen-maps") !== -1
             ? "navbar-absolute "
             : "navbar-absolute " +
-              (this.state.color === "transparent" ? "navbar-transparent " : "")
+              (color === "transparent" ? "navbar-transparent " : "")
         }
       >
         <Container fluid>
@@ -115,24 +102,24 @@ class AdminNavbar extends React.Component {
             <div className="navbar-toggle">
               <button
                 type="button"
-                ref={this.sidebarToggle}
+                ref={sidebarToggle}
                 className="navbar-toggler"
-                onClick={() => this.openSidebar()}
+                onClick={() => openSidebar()}
               >
                 <span className="navbar-toggler-bar bar1" />
                 <span className="navbar-toggler-bar bar2" />
                 <span className="navbar-toggler-bar bar3" />
               </button>
             </div>
-            <NavbarBrand href="/">{this.props.brandText}</NavbarBrand>
+            <NavbarBrand href="/">{props.brandText}</NavbarBrand>
           </div>
-          <NavbarToggler onClick={this.toggle}>
+          <NavbarToggler onClick={toggle}>
             <span className="navbar-toggler-bar navbar-kebab" />
             <span className="navbar-toggler-bar navbar-kebab" />
             <span className="navbar-toggler-bar navbar-kebab" />
           </NavbarToggler>
           <Collapse
-            isOpen={this.state.isOpen}
+            isOpen={isOpen}
             navbar
             className="justify-content-end"
           >
@@ -158,8 +145,8 @@ class AdminNavbar extends React.Component {
               </NavItem>
               <Dropdown
                 nav
-                isOpen={this.state.dropdownOpen}
-                toggle={e => this.dropdownToggle(e)}
+                isOpen={dropdownOpen}
+                toggle={e => dropdownToggle(e)}
               >
                 <DropdownToggle caret nav>
                   <i className="now-ui-icons location_world" />
@@ -186,16 +173,8 @@ class AdminNavbar extends React.Component {
         </Container>
       </Navbar>
     );
-  }
+
+
 }
-
-AdminNavbar.defaultProps = {
-  brandText: "Default Brand Text"
-};
-
-AdminNavbar.propTypes = {
-  // string for the page name
-  brandText: PropTypes.string
-};
 
 export default AdminNavbar;

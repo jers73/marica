@@ -18,7 +18,6 @@ import React from "react";
 // react plugin used to create charts
 import { Line } from "react-chartjs-2";
 // react plugin for creating vector maps
-import { VectorMap } from "react-jvectormap";
 
 // reactstrap components
 import {
@@ -44,7 +43,6 @@ import {
   dashboardPanelChart,
   dashboardActiveUsersChart,
   dashboardSummerChart,
-  dashboardActiveCountriesCard
 } from "variables/charts.jsx";
 
 import jacket from "assets/img/saint-laurent.jpg";
@@ -52,20 +50,6 @@ import shirt from "assets/img/balmain.jpg";
 import swim from "assets/img/prada.jpg";
 
 import { table_data } from "variables/general.jsx";
-
-var mapData = {
-  AU: 760,
-  BR: 550,
-  CA: 120,
-  DE: 1300,
-  FR: 540,
-  GB: 690,
-  GE: 200,
-  IN: 200,
-  RO: 600,
-  RU: 300,
-  US: 2920
-};
 
 class Dashboard extends React.Component {
   createTableData() {
@@ -271,54 +255,6 @@ class Dashboard extends React.Component {
               </Card>
             </Col>
             <Col xs={12} md={4}>
-              <Card className="card-chart">
-                <CardHeader>
-                  <h5 className="card-category">Active Countries</h5>
-                  <CardTitle tag="h2">105</CardTitle>
-                </CardHeader>
-                <CardBody>
-                  <div className="chart-area">
-                    <Line
-                      data={dashboardActiveCountriesCard.data}
-                      options={dashboardActiveCountriesCard.options}
-                    />
-                  </div>
-                  <VectorMap
-                    map={"world_mill"}
-                    backgroundColor="transparent"
-                    zoomOnScroll={false}
-                    containerStyle={{
-                      width: "100%",
-                      height: "280px"
-                    }}
-                    containerClassName="map"
-                    regionStyle={{
-                      initial: {
-                        fill: "#e4e4e4",
-                        "fill-opacity": 0.9,
-                        stroke: "none",
-                        "stroke-width": 0,
-                        "stroke-opacity": 0
-                      }
-                    }}
-                    series={{
-                      regions: [
-                        {
-                          values: mapData,
-                          scale: ["#AAAAAA", "#444444"],
-                          normalizeFunction: "polynomial"
-                        }
-                      ]
-                    }}
-                  />
-                </CardBody>
-                <CardFooter>
-                  <div className="stats">
-                    <i className="now-ui-icons ui-2_time-alarm" />
-                    Last 7 days
-                  </div>
-                </CardFooter>
-              </Card>
             </Col>
           </Row>
           <Row>

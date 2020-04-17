@@ -14,7 +14,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
@@ -28,63 +28,40 @@ import Sidebar from "components/Sidebar/Sidebar.jsx";
 
 import routes from "routes.js";
 
-var ps;
+let ps;
 
-class Admin extends React.Component {
-  state = {
-    sidebarMini: true,
-    backgroundColor: "blue"
-  };
-  notificationAlert = React.createRef();
-  mainPanel = React.createRef();
-  componentDidMount() {
+const Admin = (...props) => {
+  const [sidebarMini, setSidebarMini] = useState(true);
+  const backgroundColor = "blue";
+  useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
       document.documentElement.className += " perfect-scrollbar-on";
       document.documentElement.classList.remove("perfect-scrollbar-off");
-      ps = new PerfectScrollbar(this.mainPanel.current);
+      ps = new PerfectScrollbar(mainPanel.current);
     }
-  }
-  componentWillUnmount() {
-    if (navigator.platform.indexOf("Win") > -1) {
-      ps.destroy();
-      document.documentElement.className += " perfect-scrollbar-off";
-      document.documentElement.classList.remove("perfect-scrollbar-on");
+    return () => {
+      if (navigator.platform.indexOf("Win") > -1) {
+        ps.destroy();
+        document.documentElement.className += " perfect-scrollbar-off";
+        document.documentElement.classList.remove("perfect-scrollbar-on");
+      }
     }
-  }
-  componentDidUpdate(e) {
-    if (e.history.action === "PUSH") {
-      document.documentElement.scrollTop = 0;
-      document.scrollingElement.scrollTop = 0;
-      this.mainPanel.current.scrollTop = 0;
-    }
-  }
-  minimizeSidebar = () => {
-    var message = "Sidebar mini ";
+  }, []);
+  const notificationAlert = useRef();
+  const mainPanel = useRef();
+
+  const minimizeSidebar = () => {
     if (document.body.classList.contains("sidebar-mini")) {
-      this.setState({ sidebarMini: false });
-      message += "deactivated...";
+      setSidebarMini(false);
     } else {
-      this.setState({ sidebarMini: true });
-      message += "activated...";
+      setSidebarMini(true);
     }
     document.body.classList.toggle("sidebar-mini");
-    var options = {};
-    options = {
-      place: "tr",
-      message: message,
-      type: "info",
-      icon: "now-ui-icons ui-1_bell-53",
-      autoDismiss: 7
-    };
-    this.notificationAlert.current.notificationAlert(options);
   };
-  handleColorClick = color => {
-    this.setState({ backgroundColor: color });
-  };
-  getRoutes = routes => {
+  const getRoutes = routes => {
     return routes.map((prop, key) => {
       if (prop.collapse) {
-        return this.getRoutes(prop.views);
+        return getRoutes(prop.views);
       }
       if (prop.layout === "/admin") {
         return (
@@ -99,11 +76,11 @@ class Admin extends React.Component {
       }
     });
   };
-  getActiveRoute = routes => {
+  const getActiveRoute = routes => {
     let activeRoute = "Default Brand Text";
     for (let i = 0; i < routes.length; i++) {
       if (routes[i].collapse) {
-        let collapseActiveRoute = this.getActiveRoute(routes[i].views);
+        let collapseActiveRoute = getActiveRoute(routes[i].views);
         if (collapseActiveRoute !== activeRoute) {
           return collapseActiveRoute;
         }
@@ -119,33 +96,49 @@ class Admin extends React.Component {
     }
     return activeRoute;
   };
-  render() {
-    return (
-      <div className="wrapper">
-        <NotificationAlert ref={this.notificationAlert} />
-        <Sidebar
-          {...this.props}
-          routes={routes}
-          minimizeSidebar={this.minimizeSidebar}
-          backgroundColor={this.state.backgroundColor}
+
+  return (
+    <div className="wrapper">
+      <NotificationAlert ref={notificationAlert} />
+      <Sidebar
+        {...props}
+        routes={routes}
+        minimizeSidebar={minimizeSidebar}
+        backgroundColor={backgroundColor}
+      />
+      <div className="main-panel" ref={mainPanel}>
+        <AdminNavbar
+          {...props}
+          brandText={getActiveRoute(routes)}
         />
-        <div className="main-panel" ref={this.mainPanel}>
-          <AdminNavbar
-            {...this.props}
-            brandText={this.getActiveRoute(routes)}
-          />
-          <Switch>
-            {this.getRoutes(routes)}
-            <Redirect from="/admin" to="/admin/dashboard" />
-          </Switch>
-          {// we don't want the Footer to be rendered on full screen maps page
-          window.location.href.indexOf("full-screen-maps") !== -1 ? null : (
-            <Footer fluid />
-          )}
-        </div>
+        <Switch>
+          {getRoutes(routes)}
+          <Redirect from="/admin" to="/admin/dashboard" />
+        </Switch>
+        <Footer fluid />
       </div>
-    );
-  }
+    </div>
+  );
 }
 
+/*
+class Admin extends React.Component {
+  notificationAlert = React.createRef();
+  mainPanel = React.createRef();
+  componentDidMount() {
+  }
+  componentWillUnmount() {
+  }
+  componentDidUpdate(e) {
+    if (e.history.action === "PUSH") {
+      document.documentElement.scrollTop = 0;
+      document.scrollingElement.scrollTop = 0;
+      this.mainPanel.current.scrollTop = 0;
+    }
+  }
+
+  render() {
+  }
+}
+ */
 export default Admin;
