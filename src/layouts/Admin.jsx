@@ -17,6 +17,7 @@ let ps;
 const Admin = (...props) => {
   const [sidebarMini, setSidebarMini] = useState(true);
   const backgroundColor = "blue";
+  /*
   useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
       document.documentElement.className += " perfect-scrollbar-on";
@@ -31,6 +32,8 @@ const Admin = (...props) => {
       }
     }
   }, []);
+
+   */
   const notificationAlert = useRef();
   const mainPanel = useRef();
 

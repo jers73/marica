@@ -31,9 +31,10 @@ const Dashboard = () => {
       setTotals(data);
     });
   }, []);
-  useEffect(async () => {
-    const data = await getGraphic(id);
-    setData(data);
+  useEffect(() => {
+    getGraphic(id).then((data) => {
+      setData(data);
+    })
   }, [id])
 
 
