@@ -44,8 +44,7 @@ import {
   chartsBar2
 } from "variables/charts";
 
-class Charts extends React.Component {
-  render() {
+const Charts = () => {
     return (
       <>
         <PanelHeader
@@ -205,7 +204,6 @@ class Charts extends React.Component {
         </div>
       </>
     );
-  }
 }
 
 export default Charts;

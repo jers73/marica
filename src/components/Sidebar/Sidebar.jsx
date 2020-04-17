@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Now UI Dashboard PRO React - v1.3.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/now-ui-dashboard-pro-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-/*eslint-disable*/
 import React from "react";
 import { NavLink } from "react-router-dom";
 // used for making the prop types of this component
@@ -26,10 +9,9 @@ import PerfectScrollbar from "perfect-scrollbar";
 import { Nav, Collapse, Button } from "reactstrap";
 
 // core components
-import avatar from "assets/img/ryan.jpg";
 import logo from "logo-white.svg";
 
-var ps;
+let ps;
 
 class Sidebar extends React.Component {
   constructor(props) {
@@ -160,20 +142,18 @@ class Sidebar extends React.Component {
         <div className="sidebar" data-color={this.props.backgroundColor}>
           <div className="logo">
             <a
-              href="https://www.creative-tim.com?ref=nudr-sidebar"
+              href="/"
               className="simple-text logo-mini"
-              target="_blank"
             >
               <div className="logo-img">
                 <img src={logo} alt="react-logo" />
               </div>
             </a>
             <a
-              href="https://www.creative-tim.com?ref=nudr-sidebar"
+              href="/"
               className="simple-text logo-normal"
-              target="_blank"
             >
-              Creative Tim
+             Covid-19
             </a>
             <div className="navbar-minimize">
               <Button
@@ -190,48 +170,6 @@ class Sidebar extends React.Component {
           </div>
 
           <div className="sidebar-wrapper" ref={this.sidebar}>
-            <div className="user">
-              <div className="photo">
-                <img src={avatar} alt="Avatar" />
-              </div>
-              <div className="info">
-                <a
-                  href="#pablo"
-                  data-toggle="collapse"
-                  aria-expanded={this.state.openAvatar}
-                  onClick={() =>
-                    this.setState({ openAvatar: !this.state.openAvatar })
-                  }
-                >
-                  <span>
-                    Ryan Gosling
-                    <b className="caret" />
-                  </span>
-                </a>
-                <Collapse isOpen={this.state.openAvatar}>
-                  <ul className="nav">
-                    <li>
-                      <a href="#pablo" onClick={e => e.preventDefault}>
-                        <span className="sidebar-mini-icon">MP</span>
-                        <span className="sidebar-normal">My Profile</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#pablo" onClick={e => e.preventDefault}>
-                        <span className="sidebar-mini-icon">EP</span>
-                        <span className="sidebar-normal">Edit Profile</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#pablo" onClick={e => e.preventDefault}>
-                        <span className="sidebar-mini-icon">S</span>
-                        <span className="sidebar-normal">Settings</span>
-                      </a>
-                    </li>
-                  </ul>
-                </Collapse>
-              </div>
-            </div>
             <Nav>{this.createLinks(this.props.routes)}</Nav>
           </div>
         </div>

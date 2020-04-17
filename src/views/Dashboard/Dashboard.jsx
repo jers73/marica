@@ -53,8 +53,8 @@ import { table_data } from "variables/general.jsx";
 
 class Dashboard extends React.Component {
   createTableData() {
-    var tableRows = [];
-    for (var i = 0; i < table_data.length; i++) {
+    const tableRows = [];
+    for (let i = 0; i < table_data.length; i++) {
       tableRows.push(
         <tr key={i}>
           <td>
