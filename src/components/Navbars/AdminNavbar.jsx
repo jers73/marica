@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
-
+import { useParams, useHistory } from "react-router-dom";
 import {
   Collapse,
   Navbar,
@@ -9,10 +9,34 @@ import {
   Container,
 } from "reactstrap";
 
+import Select from "react-select";
+
 const AdminNavbar = (...props) => {
+  const countries = [
+    {
+      "value": "US",
+      "label": "United States of America"
+    },
+    {
+      "value": "MX",
+      "label": "Mexico"
+    },
+    {
+      "value": "CA",
+      "label": "Canada"
+    },
+    {
+      "value": "AR",
+      "label": "Argentina"
+    },
+  ];
+  let { id } = useParams();
+  const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [color, setColor] = useState("transparent");
+  const [country, setCountry] = useState(id);
+
   const sidebarToggle = useRef();
   const toggle = () => {
     if (isOpen) {
@@ -51,6 +75,11 @@ const AdminNavbar = (...props) => {
       sidebarToggle.current.classList.toggle("toggled");
     }
   });
+
+  const updateCountry = (selection) => {
+    setCountry(selection.value);
+    history.push(`/admin/dashboard/${selection.value}`)
+  }
 
 
     return (
@@ -95,14 +124,24 @@ const AdminNavbar = (...props) => {
             navbar
             className="justify-content-end"
           >
+            <div style={{minWidth: "400px"}}>
+              <Select
+                className="react-select primary"
+                classNamePrefix="react-select"
+                placeholder="Country"
+                name="singleSelect"
+                value={country}
+                options={countries}
+                onChange={updateCountry}
+              />
+            </div>
+
             <Nav navbar>
             </Nav>
           </Collapse>
         </Container>
       </Navbar>
     );
-
-
 }
 
 export default AdminNavbar;

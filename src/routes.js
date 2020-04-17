@@ -3,7 +3,7 @@ import Charts from "views/Charts/Charts.jsx";
 
 let routes = [
   {
-    path: "/dashboard",
+    path: "/dashboard/:id",
     name: "Dashboard",
     icon: "now-ui-icons design_app",
     component: Dashboard,

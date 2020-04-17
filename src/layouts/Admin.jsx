@@ -97,7 +97,7 @@ const Admin = (...props) => {
         />
         <Switch>
           {getRoutes(routes)}
-          <Redirect from="/admin" to="/admin/dashboard" />
+          <Redirect from="/admin" to="/admin/dashboard/US" />
         </Switch>
         <Footer fluid />
       </div>
