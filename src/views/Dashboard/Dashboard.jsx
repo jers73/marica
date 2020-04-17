@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 // react plugin used to create charts
 import { Line } from "react-chartjs-2";
+import { useParams } from "react-router-dom";
 // react plugin for creating vector maps
 
 // reactstrap components
@@ -14,20 +15,12 @@ import {
 // core components
 import PanelHeader from "components/PanelHeader/PanelHeader.jsx";
 
-import {
-  dashboardActiveUsersChart,
-  dashboardSummerChart,
-} from "variables/charts.jsx";
-
-import {getTotals, worldChart} from "../../data/cases";
-
-import jacket from "assets/img/saint-laurent.jpg";
-import shirt from "assets/img/balmain.jpg";
-import swim from "assets/img/prada.jpg";
-
-import { table_data } from "variables/general.jsx";
+import {getGraphic, getTotals, worldChart} from "../../data/cases";
 
 const Dashboard = () => {
+  let { id } = useParams();
+  const [data, setData] = useState(worldChart([], []));
+
   const [totals, setTotals] = useState({
     "TotalConfirmed": 0,
     "TotalDeaths": 0,
@@ -38,13 +31,19 @@ const Dashboard = () => {
       setTotals(data);
     });
   }, []);
+  useEffect(async () => {
+    const data = await getGraphic(id);
+    setData(data);
+  }, [id])
+
+
     return (
       <>
         <PanelHeader
           size="lg"
           content={
               <Line
-                data={worldChart.data}
+                data={data}
                 options={worldChart.options}
               />
           }

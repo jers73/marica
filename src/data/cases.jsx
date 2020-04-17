@@ -1,29 +1,9 @@
-export const worldChart = {
-  data: canvas => {
-    const ctx = canvas.getContext("2d");
+export const worldChart = (labels, info) => {
+  return () => {
     const chartColor = "#FFFFFF";
-    const gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
-    gradientStroke.addColorStop(0, "#80b6f4");
-    gradientStroke.addColorStop(1, chartColor);
-    const gradientFill = ctx.createLinearGradient(0, 200, 0, 50);
-    gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
-    gradientFill.addColorStop(1, "rgba(255, 255, 255, 0.14)");
 
     return {
-      labels: [
-        "JAN",
-        "FEB",
-        "MAR",
-        "APR",
-        "MAY",
-        "JUN",
-        "JUL",
-        "AUG",
-        "SEP",
-        "OCT",
-        "NOV",
-        "DEC"
-      ],
+      labels,
       datasets: [
         {
           label: "Data",
@@ -37,14 +17,15 @@ export const worldChart = {
           pointHoverBorderWidth: 2,
           pointRadius: 5,
           fill: true,
-          backgroundColor: gradientFill,
+          // backgroundColor: gradientFill,
           borderWidth: 2,
-          data: [50, 150, 100, 190, 130, 90, 150, 160, 120, 140, 190, 95],
+          data: info,
         }
       ]
     };
-  },
-  options: {
+  }
+};
+worldChart.options = {
     layout: {
       padding: {
         left: 20,
@@ -102,10 +83,30 @@ export const worldChart = {
         }
       ]
     }
-  }
-};
+  };
 
-export const getTotals = () => {
-  return fetch("https://api.covid19api.com/world/total")
-    .then((response) => response.json());
+export const getTotals = async () => {
+  const response = await fetch("https://api.covid19api.com/world/total");
+  return await response.json();
+}
+
+export const  getGraphic = async (country) => {
+  const today = new Date()
+  const priorDate = new Date().setDate(today.getDate()-30)
+  const response = await fetch(`https://api.covid19api.com/total/country/${country}`);
+  const data = (await response.json())
+    .filter((item) => {
+      const date = new Date(item.Date);
+      return priorDate < date;
+    })
+    .map(({Confirmed, Deaths, Recovered, Date}) => {
+      return {
+        Confirmed,
+        Date: Date.substring(0, 10)
+      }
+    });
+  const labels = data.map((item) => item.Date);
+  const info = data.map((item) => item.Confirmed);
+
+  return worldChart(labels, info);
 }
