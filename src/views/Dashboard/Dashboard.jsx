@@ -18,6 +18,7 @@ import PanelHeader from "components/PanelHeader/PanelHeader.jsx";
 import {getGraphic, getTotals, worldChart} from "../../data/cases";
 
 const Dashboard = () => {
+  const formatter = new Intl.NumberFormat('en-US');
   let { id } = useParams();
   const [data, setData] = useState(worldChart([], []));
 
@@ -62,7 +63,7 @@ const Dashboard = () => {
                           <div className="icon icon-info">
                             <i className="now-ui-icons users_single-02" />
                           </div>
-                          <h3 className="info-title">{totals.TotalConfirmed}</h3>
+                          <h3 className="info-title">{formatter.format(totals.TotalConfirmed)}</h3>
                           <h6 className="stats-title">Total Confirm</h6>
                         </div>
                       </div>
@@ -74,7 +75,7 @@ const Dashboard = () => {
                             <i className="now-ui-icons users_single-02" />
                           </div>
                           <h3 className="info-title">
-                            {totals.TotalDeaths}
+                            {formatter.format(totals.TotalDeaths)}
                           </h3>
                           <h6 className="stats-title">Total Deaths</h6>
                         </div>
@@ -86,7 +87,7 @@ const Dashboard = () => {
                           <div className="icon icon-success">
                             <i className="now-ui-icons users_single-02" />
                           </div>
-                          <h3 className="info-title">{totals.TotalRecovered}</h3>
+                          <h3 className="info-title">{formatter.format(totals.TotalRecovered)}</h3>
                           <h6 className="stats-title">Total Recover</h6>
                         </div>
                       </div>

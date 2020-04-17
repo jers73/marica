@@ -46,9 +46,6 @@ const AdminNavbar = (...props) => {
     }
     setIsOpen(!isOpen);
   };
-  const dropdownToggle = () => {
-    setDropdownOpen(dropdownOpen);
-  };
   const openSidebar = () => {
     document.documentElement.classList.toggle("nav-open");
     sidebarToggle.current.classList.toggle("toggled");
