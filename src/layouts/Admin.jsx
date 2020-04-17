@@ -12,13 +12,12 @@ import Sidebar from "components/Sidebar/Sidebar.jsx";
 
 import routes from "routes.js";
 
-let ps;
 
 const Admin = (...props) => {
   const [sidebarMini, setSidebarMini] = useState(true);
   const backgroundColor = "blue";
-  /*
   useEffect(() => {
+    let ps;
     if (navigator.platform.indexOf("Win") > -1) {
       document.documentElement.className += " perfect-scrollbar-on";
       document.documentElement.classList.remove("perfect-scrollbar-off");
@@ -33,7 +32,6 @@ const Admin = (...props) => {
     }
   }, []);
 
-   */
   const notificationAlert = useRef();
   const mainPanel = useRef();
 
